@@ -76,13 +76,15 @@ def evaluation(measure, prediction, test_labels, test_data):
     if measure == "g":
         return stats[target_label][-g]
     if measure == "popt20":
-        return get_popt(test_data)
+        df1 = pd.DataFrame(prediction, columns=["prediction"])
+        df2 = pd.concat([test_data, df1], axis=1)
+        return get_popt(df2)
 
 def main(*x):
     l = np.asarray(x)
-    function=l[3]
-    measure=l[4]
-    data=l[5]
+    function=l[1]
+    measure=l[2]
+    data=l[3]
 
     split = split_two(data)
     pos = split['pos']
@@ -91,9 +93,12 @@ def main(*x):
     ## 20% train and grow
     cut_pos, cut_neg = cut_position(pos, neg, percentage=80)
     data_train, data_test = divide_train_test(pos, neg, cut_pos, cut_neg)
-    data_train = smote.execute(l[:3], samples=data_train[:, :-1], labels=data_train[:, -1:])
 
-    prediction=function(data_train[:, :-1].values, data_train[:, -1:].values, data_test[:, :-1].values)
+    data_train = smote.execute(l[0].values(), samples=data_train.iloc[:, :-1], labels=data_train.iloc[:, -1:])
 
-    return evaluation(measure, prediction,data_test[:, -1:].values, data_test)
+    lab = [y for x in data_train.iloc[:, -1:].values.tolist() for y in x]
+    prediction=function(data_train.iloc[:, :-1].values, lab, data_test.iloc[:, :-1].values)
+
+    lab = [y for x in data_test.iloc[:, -1:].values.tolist() for y in x]
+    return evaluation(measure, prediction,lab, data_test)
 

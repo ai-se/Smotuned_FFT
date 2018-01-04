@@ -2,16 +2,16 @@ from __future__ import print_function, division
 
 __author__ = 'amrit'
 
+import sys
+sys.dont_write_bytecode = True
 from random import randint, random
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
-import sys
 import pandas as pd
 
-sys.dont_write_bytecode = True
-
 def execute(l, samples, labels):
-    data_train, train_label=balance(samples.values, labels.values , m=int(l[0]), r=int(l[1]), neighbors=int(l[2]))
+    lab=[y for x in labels.values.tolist() for y in x]
+    data_train, train_label=balance(samples.values, lab , m=int(l[0]), r=int(l[1]), neighbors=int(l[2]))
     df1 = pd.DataFrame(data_train,columns=samples.columns.tolist())
     #s1 = pd.Series(train_label, name='bug')
     df2 = pd.DataFrame(train_label, columns=labels.columns.tolist())
