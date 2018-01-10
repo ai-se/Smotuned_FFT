@@ -9,7 +9,7 @@ from ABCD import ABCD
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
+from sklearn.svm import SVC, LinearSVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
@@ -45,7 +45,7 @@ def RF(train_data,train_labels,test_data):
     return prediction
 
 def SVM(train_data,train_labels,test_data):
-    model = SVC(kernel='linear', cache_size=20000).fit(train_data, train_labels)
+    model = LinearSVC().fit(train_data, train_labels)
     prediction = model.predict(test_data)
     return prediction
 

@@ -52,6 +52,7 @@ def _test(res=''):
         temp={}
         for x in measures:
             l=[]
+            l1=[]
             start_time = time.time()
             for _ in xrange(repeats):
                 ## Shuffle
@@ -60,7 +61,8 @@ def _test(res=''):
                 test_df = test_df.sample(frac=1).reset_index(drop=True)
 
                 if x=="d2h":
-                    de = DE(GEN=5, Goal="Min")
+                    #de = DE(GEN=5, Goal="Min")
+                    de = DE(GEN=5, Goal="Max", termination="Late")
                     v, pareto = de.solve(main, OrderedDict(learners_para_dic[0]),
                                          learners_para_bounds[0], learners_para_categories[0], i, x, train_df)
                     paras = v.ind
@@ -73,9 +75,11 @@ def _test(res=''):
                     lab = [y for a in test_df.iloc[:, -1:].values.tolist() for y in a]
                     val = evaluation(x, labels, lab, test_df)
                     l.append(val)
+                    l1.append(v.ind)
 
                 elif x== "popt20":
-                    de = DE(GEN=5, Goal="Max")
+                    #de = DE(GEN=5, Goal="Max")
+                    de = DE(GEN=5, Goal="Max", termination="Late")
                     v, pareto = de.solve(main, OrderedDict(learners_para_dic[0]),
                                          learners_para_bounds[0], learners_para_categories[0], i, x, train_df)
                     paras = v.ind
@@ -88,12 +92,13 @@ def _test(res=''):
                     lab = [y for a in test_df.iloc[:, -1:].values.tolist() for y in a]
                     val = evaluation(x, labels, lab, test_df)
                     l.append(val)
+                    l1.append(v.ind)
 
             total_time=time.time() - start_time
-            temp[x]=[l,total_time]
+            temp[x]=[l,l1, total_time]
         final_dic[i.__name__]=temp
     print(final_dic)
-    with open('../dump/' + res + '_early.pickle', 'wb') as handle:
+    with open('../dump/' + res + '_late.pickle', 'wb') as handle:
         pickle.dump(final_dic, handle)
 
 if __name__ == '__main__':
