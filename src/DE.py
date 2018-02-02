@@ -46,6 +46,11 @@ class DE(object):
                 l.append(self._randchoice)
         self.calls=l
 
+## Example:
+#learners_para_dic=[OrderedDict([("m",1), ("r",1),("k",1)])]
+#learners_para_bounds=[[(50,100,200, 400), (1,6), (5,21)]]
+#learners_para_categories=[["categorical", "integer", "integer"]]
+
     ## Paras will be keyword with default values, and bounds would be list of tuples
     def solve(self, fitness, paras=OrderedDict(), bounds=[], category=[], *r):
         self.para_len=len(paras.keys())
