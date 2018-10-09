@@ -62,7 +62,7 @@ def _test(res=''):
 
                 if x=="d2h":
                     #de = DE(GEN=5, Goal="Min")
-                    de = DE(GEN=5, Goal="Max", termination="Late")
+                    de = DE(GEN=5, Goal="Min", termination="Late")
                     v, pareto = de.solve(main, OrderedDict(learners_para_dic[0]),
                                          learners_para_bounds[0], learners_para_categories[0], i, x, train_df)
                     paras = v.ind
